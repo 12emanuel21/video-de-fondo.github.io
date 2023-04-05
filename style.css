@@ -1,0 +1,220 @@
+
+    
+
+body{
+    margin: 0;
+    padding: 0;
+   overflow: hidden; 
+   background-color: black;
+}
+ .container{
+    display: flex;
+} 
+.container video{
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 120%;
+   object-fit:cover;
+}
+.capa1{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vw;
+   
+    background:rgb(65, 65, 80);
+    opacity: 0.9;
+    margin: 0;
+    
+}
+.capa2{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 60vw;
+    height: 100%;
+    clip-path: polygon(0 0, 100% 0%, 75% 100%, 0% 100%); 
+    background:rgb(0, 0, 0);
+    
+    margin: 0;
+    
+    display: flex;
+    
+    align-items: center;
+    flex-direction: column;
+
+}
+.text{
+    margin-top: 8rem;
+    width: 60%;
+    
+  
+}
+.capa2 h1{
+    color: white;
+    font-size: 4rem;
+    opacity: 1;
+   
+}
+.capa2 p{
+    color: white;
+    font-size: 1.5rem;
+    opacity: 1;
+    
+}
+.enviar{
+    width: 60%;
+    ;
+
+}
+input[type="text"]{
+    width: 60%;
+    height: 3rem;
+    border-radius:5px ;
+    border: none;
+    margin-right: 20px;
+    outline: none;
+
+}
+input[type="text"]::placeholder{
+    font-size: 1rem;
+    color: grey;
+   padding: 1rem;
+}
+input[type="text"]:focus{
+    outline: 2px solid blue;
+    font-size: 1rem ;
+    color: black;
+   text-align:center;
+}
+input[type="submit"]{
+    width: 20%;
+    height: 3rem;
+    border-radius:5px ;
+    border: none;
+    background-color: yellow;
+    cursor: pointer;
+    font-weight: 600;
+    color: black;
+}
+.redes{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    margin: 15rem 4rem;
+
+}
+.redes >a >i{
+    padding: 1.5rem;
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    margin: 1rem;
+
+}
+.redes a{
+    margin: 2rem 0;
+}
+@media (max-width: 1400px){
+    body{
+        overflow-y: scroll;
+    }
+    .capa1{
+        height: 120vw;
+        width: 100vw;
+    }
+    .capa2{
+        height: 80vw;
+        width: 100vw;
+        clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 100%);
+       
+    }
+    .capa2 h1{
+        font-size: 5rem;
+    }
+    .capa2 p{
+        font-size: 2rem;
+    }
+    .text{
+        width: 90%;
+    }
+    .enviar{
+        width: 90%;
+    }
+    input[type="submit"]{
+        font-size: 1rem;
+    }
+    .redes{
+        flex-direction: row;
+       float: inline-end;
+    font-size: 2rem;
+     top: auto;
+     bottom: 0;
+     margin: 20% 40%;
+        
+    }
+    .container video{
+        height: 120vw
+    
+    }
+}
+@media (max-width: 900px) {
+   body{
+    overflow-y: scroll;
+   }
+    .capa1{
+        height: 200vw;
+        width: 100vw;
+    }
+    .capa2{
+        height: 150vw;
+        width: 100vw;
+        clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 100%);
+       
+    }
+    .text{
+        width: 80%;
+    }
+    .text h1{
+        font-size: 2.2rem;
+    }
+    .text p{
+        font-size: 1rem;
+    }
+    .enviar{
+        width: 80%;
+    }
+    input[type="text"]{
+        width: 50%;
+    }
+    input[type="text"]::placeholder{
+        font-size: 12px;
+    }
+    input[type="submit"]{
+        width: 30%;
+        font-size: 10px;
+    }
+    .redes{
+        flex-direction: row;
+       float: inline-end;
+     /*    margin-top: 30rem; */
+     top: auto;
+     bottom: 0;
+     margin: 20% 15%;
+        
+    }
+    .redes  >a> i{
+        font-size: 15px;
+    }
+    .container video{
+        height: 200vw
+    
+    }
+   
+
+}
