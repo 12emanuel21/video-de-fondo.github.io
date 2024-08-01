@@ -4,22 +4,22 @@
 buscador de coincidencias 
 
 """
-import os
-import datetime
-import time
-import re
-from pathlib import Path
-import math
+import os  <br>
+import datetime <br>
+import time <br>
+import re <br>
+from pathlib import Path <br>
+import math <br>
 
-inicio = time.time()
+inicio = time.time() <br>
 
-ruta = "C:\\Users\\emanuel\\Desktop\\PROYECTOS\\PYTHON_mejor_curso\\9. DÍA 9 - PROGRAMA UN BUSCADOR DE NÚMEROS DE SERIE\\Mi_Gran_Directorio"
-mi_patron = r"N\D{3}-\d{5}"
-hoy = datetime.date.today()
-hros_encontrados = [] 
-archivos_encontrados = []
+ruta = "C:\\Users\\emanuel\\Desktop\\PROYECTOS\\PYTHON_mejor_curso\\9. DÍA 9 - PROGRAMA UN BUSCADOR DE NÚMEROS DE SERIE\\Mi_Gran_Directorio" <br>
+mi_patron = r"N\D{3}-\d{5}" <br>
+hoy = datetime.date.today() <br>
+hros_encontrados = []  <br>
+archivos_encontrados = [] <br>
 
-def buscar_numero(archivo,patron):
+def buscar_numero(archivo,patron): <br>
     
     este_archivo = open(archivo, 'r')
     texto = este_archivo.read()
@@ -28,34 +28,34 @@ def buscar_numero(archivo,patron):
     else:
         return ""
     
-def crear_lista():   
-    for carpeta,subcarpeta,archivo in os.walk(ruta):
-        for a in archivo:
-            resultado = buscar_numero(Path(carpeta,a),mi_patron)
-            if resultado != '':
-                hros_encontrados.append((resultado.group()))
-                archivos_encontrados.append(a.title())
+def crear_lista():    <br>
+    for carpeta,subcarpeta,archivo in os.walk(ruta): <br>
+        for a in archivo: <br>
+            resultado = buscar_numero(Path(carpeta,a),mi_patron) <br>
+            if resultado != '': <br>
+                hros_encontrados.append((resultado.group())) <br>
+                archivos_encontrados.append(a.title()) <br>
     
                 
-def mostrar_todo():
-    indice = 0
-    print('-'* 50)
-    print(f'Fecha de busqueda: {hoy.day}/{hoy.month}/{hoy.year}')
-    print('\n')
-    print('ARCHIVO\t\t\tNRO. SERIE')
-    print('--------\t\t\t----------')
-    for a in archivos_encontrados:
-        print(f'{a}\t{hros_encontrados[indice]}')
-        indice += 1
-    print('\n')
-    print(f'Numeros encontrados: {len(hros_encontrados)}')
-    fin = time.time()
-    duracion = fin - inicio
-    print(f'Duracion de la busqueda: {math.ceil(duracion)} segundos')
-    print('-'* 50)
+def mostrar_todo(): <br>
+    indice = 0 <br>
+    print('-'* 50) <br>
+    print(f'Fecha de busqueda: {hoy.day}/{hoy.month}/{hoy.year}') <br>
+    print('\n') <br>
+    print('ARCHIVO\t\t\tNRO. SERIE') <br>
+    print('--------\t\t\t----------') <br>
+    for a in archivos_encontrados:<br>
+        print(f'{a}\t{hros_encontrados[indice]}') <br>
+        indice += 1 <br>
+    print('\n') <br>
+    print(f'Numeros encontrados: {len(hros_encontrados)}') <br>
+    fin = time.time() <br>
+    duracion = fin - inicio <br>
+    print(f'Duracion de la busqueda: {math.ceil(duracion)} segundos') <br>
+    print('-'* 50) <br>
     
-crear_lista()
-mostrar_todo()
+crear_lista() <br>
+mostrar_todo() <br>
 """
 
 
