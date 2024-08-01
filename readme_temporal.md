@@ -3,7 +3,7 @@
 
 buscador de coincidencias 
 
-
+"""
 import os
 import datetime
 import time
@@ -56,7 +56,7 @@ def mostrar_todo():
     
 crear_lista()
 mostrar_todo()
-
+"""
 
 
 
