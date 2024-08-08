@@ -4,58 +4,84 @@
 buscador de coincidencias 
 
 """
-import os  <br>
-import datetime <br>
-import time <br>
-import re <br>
-from pathlib import Path <br>
-import math <br>
+import pandas as pd
+from openpyxl import Workbook
+from sqlalchemy import create_engine
+from mysql import connector
 
-inicio = time.time() <br>
+def cargar_datos_excel(ruta_archivo):
+    df = pd.read_excel(ruta_archivo)
+    return df
 
-ruta = "C:\\Users\\emanuel\\Desktop\\PROYECTOS\\PYTHON_mejor_curso\\9. DÍA 9 - PROGRAMA UN BUSCADOR DE NÚMEROS DE SERIE\\Mi_Gran_Directorio" <br>
-mi_patron = r"N\D{3}-\d{5}" <br>
-hoy = datetime.date.today() <br>
-hros_encontrados = []  <br>
-archivos_encontrados = [] <br>
 
-def buscar_numero(archivo,patron): <br>
+def datos_manual():
+    data = {
+        'Columna1': ['Dato1', 'Dato2', 'Dato3'],
+        'Columna2': ['Dato4', 'Dato5', 'Dato6']
+    }
+    df = pd.DataFrame(data)
+    return df
+
+def cargar_datos_bd(usuario, contraseña, host, base_datos):
+    conexion = create_engine(f'mysql+mysqlconnector://{usuario}:{contraseña}@{host}/{base_datos}')
+    consulta = "SELECT * FROM user"
+    df = pd.read_sql(consulta, conexion)
+    return df
+
+
+
+def combinar_datos(*dfs):
+    df_combinado = pd.concat(dfs, ignore_index=True)
+    return df_combinado
+
+
+def guardar_excel(df, ruta_salida):
+    with pd.ExcelWriter(ruta_salida, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+        
+        
+def crear_informe(df, ruta_salida):
+    with pd.ExcelWriter(ruta_salida, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Informe')
+        
+        workbook = writer.book
+        worksheet = writer.sheets['Informe']
+        
+        # Añadir formateo si es necesario
+        for col in worksheet.columns:
+            max_length = 0
+            column = col[0].column_letter # Get the column name
+            for cell in col:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(cell.value)
+                except:
+                    pass
+            adjusted_width = (max_length + 2)
+            worksheet.column_dimensions[column].width = adjusted_width
+
+
+ruta_excel =  "C:\\Users\\emanuel\\Desktop\\programa de fabian\\Shop_Manillas.xlsx"
+  
+def main():
+    # Cargar datos de diferentes fuentes
+    df_excel = cargar_datos_excel(ruta_excel)
+    df_manual = datos_manual()
+    df_bd = cargar_datos_bd('root', '102030', 'localhost:3308', 'testuser')
     
-    este_archivo = open(archivo, 'r')
-    texto = este_archivo.read()
-    if re.search(patron, texto):
-        return re.search(patron, texto)
-    else:
-        return ""
+    # Combinar datos
+    df_combinado = combinar_datos(df_excel, df_manual, df_bd)
     
-def crear_lista():    <br>
-    for carpeta,subcarpeta,archivo in os.walk(ruta): <br>
-        for a in archivo: <br>
-            resultado = buscar_numero(Path(carpeta,a),mi_patron) <br>
-            if resultado != '': <br>
-                hros_encontrados.append((resultado.group())) <br>
-                archivos_encontrados.append(a.title()) <br>
+    # Crear y guardar el informe en un archivo Excel
+    ruta_salida = "C:\\Users\\emanuel\\Desktop\\programa de fabian"
+    crear_informe(df_combinado, ruta_salida)
     
-                
-def mostrar_todo(): <br>
-    indice = 0 <br>
-    print('-'* 50) <br>
-    print(f'Fecha de busqueda: {hoy.day}/{hoy.month}/{hoy.year}') <br>
-    print('\n') <br>
-    print('ARCHIVO\t\t\tNRO. SERIE') <br>
-    print('--------\t\t\t----------') <br>
-    for a in archivos_encontrados:<br>
-        print(f'{a}\t{hros_encontrados[indice]}') <br>
-        indice += 1 <br>
-    print('\n') <br>
-    print(f'Numeros encontrados: {len(hros_encontrados)}') <br>
-    fin = time.time() <br>
-    duracion = fin - inicio <br>
-    print(f'Duracion de la busqueda: {math.ceil(duracion)} segundos') <br>
-    print('-'* 50) <br>
-    
-crear_lista() <br>
-mostrar_todo() <br>
+    print(f'Informe guardado en {ruta_salida}')
+
+if __name__ == "__main__":
+    main()
+     
+        
 """
 
 
