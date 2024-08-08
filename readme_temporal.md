@@ -4,45 +4,45 @@
 buscador de coincidencias 
 
 """
-import pandas as pd
-from openpyxl import Workbook
-from sqlalchemy import create_engine
-from mysql import connector
+import pandas as pd <br>
+from openpyxl import Workbook <br>
+from sqlalchemy import create_engine <br>
+from mysql import connector <br>
 
-def cargar_datos_excel(ruta_archivo):
-    df = pd.read_excel(ruta_archivo)
-    return df
-
-
-def datos_manual():
-    data = {
-        'Columna1': ['Dato1', 'Dato2', 'Dato3'],
-        'Columna2': ['Dato4', 'Dato5', 'Dato6']
-    }
-    df = pd.DataFrame(data)
-    return df
-
-def cargar_datos_bd(usuario, contraseña, host, base_datos):
-    conexion = create_engine(f'mysql+mysqlconnector://{usuario}:{contraseña}@{host}/{base_datos}')
-    consulta = "SELECT * FROM user"
-    df = pd.read_sql(consulta, conexion)
-    return df
+def cargar_datos_excel(ruta_archivo): <br>
+    df = pd.read_excel(ruta_archivo) <br>
+    return df <br>
 
 
+def datos_manual(): <br>
+    data = { <br>
+        'Columna1': ['Dato1', 'Dato2', 'Dato3'], <br>
+        'Columna2': ['Dato4', 'Dato5', 'Dato6'] <br>
+    } <br>
+    df = pd.DataFrame(data) <br>
+    return df <br>
 
-def combinar_datos(*dfs):
-    df_combinado = pd.concat(dfs, ignore_index=True)
-    return df_combinado
+def cargar_datos_bd(usuario, contraseña, host, base_datos): <br>
+    conexion = create_engine(f'mysql+mysqlconnector://{usuario}:{contraseña}@{host}/{base_datos}') <br>
+    consulta = "SELECT * FROM user" <br>
+    df = pd.read_sql(consulta, conexion) <br>
+    return df <br>
 
 
-def guardar_excel(df, ruta_salida):
-    with pd.ExcelWriter(ruta_salida, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False)
+
+def combinar_datos(*dfs): <br>
+    df_combinado = pd.concat(dfs, ignore_index=True) <br>
+    return df_combinado <br>
+
+
+def guardar_excel(df, ruta_salida): <br>
+    with pd.ExcelWriter(ruta_salida, engine='openpyxl') as writer: <br>
+        df.to_excel(writer, index=False) <br>
         
         
-def crear_informe(df, ruta_salida):
-    with pd.ExcelWriter(ruta_salida, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Informe')
+def crear_informe(df, ruta_salida): <br>
+    with pd.ExcelWriter(ruta_salida, engine='openpyxl') as writer: <br>
+        df.to_excel(writer, index=False, sheet_name='Informe') <br>
         
         workbook = writer.book
         worksheet = writer.sheets['Informe']
@@ -61,13 +61,13 @@ def crear_informe(df, ruta_salida):
             worksheet.column_dimensions[column].width = adjusted_width
 
 
-ruta_excel =  "C:\\Users\\emanuel\\Desktop\\programa de fabian\\Shop_Manillas.xlsx"
+ruta_excel =  "C:\\Users\\emanuel\\Desktop\\programa de fabian\\Shop_Manillas.xlsx" <br>
   
-def main():
-    # Cargar datos de diferentes fuentes
-    df_excel = cargar_datos_excel(ruta_excel)
-    df_manual = datos_manual()
-    df_bd = cargar_datos_bd('root', '102030', 'localhost:3308', 'testuser')
+def main(): <br>
+    # Cargar datos de diferentes fuentes <br>
+    df_excel = cargar_datos_excel(ruta_excel) <br>
+    df_manual = datos_manual() <br>
+    df_bd = cargar_datos_bd('root', '102030', 'localhost:3308', 'testuser') <br>
     
     # Combinar datos
     df_combinado = combinar_datos(df_excel, df_manual, df_bd)
@@ -78,8 +78,8 @@ def main():
     
     print(f'Informe guardado en {ruta_salida}')
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": <br>
+    main() <br>
      
         
 """
