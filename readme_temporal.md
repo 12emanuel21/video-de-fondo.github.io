@@ -1,5 +1,5 @@
 
-"""
+<p>
 
 def cargar_archivo(request):
     if request.method == 'POST':
@@ -29,7 +29,7 @@ def cargar_archivo(request):
 
 
 
-"""
+</p>
 
 
 
