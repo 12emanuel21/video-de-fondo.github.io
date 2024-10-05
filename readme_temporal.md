@@ -16,7 +16,9 @@ def obtener_usuario_autenticado(usuario_windows): <br>
     with engine.connect() as conn: <br>
         query = select([usuarios.c.mensaje_personalizado]).where(usuarios.c.nombre_usuario == usuario_windows) <br>
         resultado = conn.execute(query).fetchone() <br>
-        return resultado[0] if resultado else None <br>
+        if resultado and resultado[0]:  # Verifica que el mensaje no sea nulo o vacío <br>
+            return resultado[0] <br>
+        return None <br>
  <br>
 def obtener_mensaje_general(): <br>
     # Consulta para obtener el mensaje general <br>
