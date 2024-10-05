@@ -1,31 +1,42 @@
 
 <p>
 
-def cargar_archivo(request):  <br>
-    if request.method == 'POST': <br>
-        archivo_xlsx = request.FILES.get('archivo_xlsx') <br>
-        if archivo_xlsx and archivo_xlsx.name.endswith('.xlsx'): <br>
-            try: <br>
-                df = pd.read_excel(archivo_xlsx, header=0) <br>
-                empleados = [] <br>
-                for _, row in df.iterrows(): <br>
-                    empleado = Empleado( <br>
-                        Nombre=row['Nombre'], <br>
-                        Apellido=row['Apellido'], <br>
-                        Edad=row['Edad'], <br>
-                        Email=row['Email'], <br>
-                        Generos=row['Sexo'], <br>
-                        Salario=row['Salario'] <br>
-                    ) <br>
-                    empleados.append(empleado) <br>
-                Empleado.objects.bulk_create(empleados, ignore_conflicts=True) <br>
-                return JsonResponse({'status_server': 'success', 'message': 'Los datos se importaron correctamente.'}) <br>
-            except Exception as e: <br>
-                logging.error("Error al cargar el archivo: %s", str(e)) <br>
-                return JsonResponse({'status_server': 'error', 'message': f'Error al cargar el archivo: {str(e)}'}) <br>
-        else: <br>
-            return JsonResponse({'status_server': 'error', 'message': 'El archivo debe ser un archivo de Excel válido.'}) <br>
-    return render(request, 'listaEmpleados.html') <br>
+from sqlalchemy import create_engine, Table, MetaData, select <br>
+ <br>
+# Configuración de la conexión a la base de datos <br>
+engine = create_engine('mysql+pymysql://usuario:contraseña@localhost/nombre_base_datos') <br>
+metadata = MetaData(bind=engine) <br>
+ <br>
+# Tablas <br>
+usuarios = Table('usuarios', metadata, autoload=True) <br>
+mensajes_generales = Table('mensajes_generales', metadata, autoload=True) <br>
+ <br>
+def obtener_usuario_autenticado(usuario_windows): <br>
+    # Consulta para ver si el usuario está autenticado <br>
+    with engine.connect() as conn: <br>
+        query = select([usuarios.c.mensaje_personalizado]).where(usuarios.c.nombre_usuario == usuario_windows) <br>
+        resultado = conn.execute(query).fetchone() <br>
+        return resultado[0] if resultado else None <br>
+ <br>
+def obtener_mensaje_general(): <br>
+    # Consulta para obtener el mensaje general <br>
+    with engine.connect() as conn: <br>
+        query = select([mensajes_generales.c.mensaje_general]) <br>
+        resultado = conn.execute(query).fetchone() <br>
+        return resultado[0] if resultado else "Mensaje general no disponible" <br>
+ <br>
+# Obtener el nombre del usuario de Windows <br>
+usuario_windows = "nombre_del_usuario"  # Aquí deberías obtener el usuario real del sistema <br>
+ <br>
+# Comprobación <br>
+mensaje_personalizado = obtener_usuario_autenticado(usuario_windows) <br>
+ <br>
+if mensaje_personalizado: <br>
+    print(f"Mensaje para {usuario_windows}: {mensaje_personalizado}") <br>
+else: <br>
+    mensaje_general = obtener_mensaje_general() <br>
+    print(f"Mensaje general: {mensaje_general}") <br>
+ <br>
 
 
 
