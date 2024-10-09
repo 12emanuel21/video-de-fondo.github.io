@@ -1,6 +1,8 @@
+# Ocultar de la Barra de Tareas
 
-<p>
-<h1> ocultar de la barra de tareas</h1>
+Este script utiliza `tkinter` y `pystray` para crear una aplicación que se oculta en la bandeja del sistema.
+
+```python
 import tkinter as tk
 import pystray
 from pystray import MenuItem, Icon
@@ -48,10 +50,7 @@ root.deiconify()
 root.mainloop()
 
 
-</p>
-
-<p>
-<h1>programa con bordes</h1>
+#///////////////////////////////////////////////////////////////////////////////////////
 
 import tkinter as tk
 from tkinter import Canvas
@@ -132,11 +131,13 @@ canvas.bind("<Button-1>", start_move)
 canvas.bind("<ButtonRelease-1>", stop_move)
 canvas.bind("<B1-Motion>", on_motion)
 
-# Botón para cerrar la ventana
-
-
 # Lista con el contenido a mostrar
-content_list = ["Establece el margen vertical en pixeles o en un valor porcentual.", "Establece el valor de movimiento para cada intervalo en pixeles. Por defecto su valor es ", "Establece el intervalo entre cada desplazamiento, en milisegundos. El valor por defecto es 85. Nota: Cualquier valor inferior a 60", "Este evento se lanza cuando la marquesina comienza su desplazamiento."]
+content_list = [
+    "Establece el margen vertical en pixeles o en un valor porcentual.",
+    "Establece el valor de movimiento para cada intervalo en pixeles. Por defecto su valor es ",
+    "Establece el intervalo entre cada desplazamiento, en milisegundos. El valor por defecto es 85. Nota: Cualquier valor inferior a 60",
+    "Este evento se lanza cuando la marquesina comienza su desplazamiento."
+]
 current_index = 0
 offset = 300  # Offset inicial para centrar el texto en la ventana
 
@@ -151,9 +152,9 @@ font = ImageFont.truetype("arial.ttf", 24)  # Cambia "arial.ttf" a la fuente que
 def update_text_image():
     global current_index, offset
     # Crear una imagen con fondo del mismo color del label
-    image = Image.new('RGB', (300, 50), (52, 152, 219))  # color de fondo igual que el label
+    image = Image.new('RGB', (300, 50), (52, 152, 219))  # Color de fondo igual que el label
     draw = ImageDraw.Draw(image)
-    
+
     # Calcular el tamaño del texto y centrarlo
     text = content_list[current_index]
     bbox = draw.textbbox((0, 0), text, font=font)
@@ -183,9 +184,6 @@ def toggle_always_on_top():
     current_state = root.wm_attributes("-topmost")
     root.wm_attributes("-topmost", not current_state)  # Cambia el estado actual
 
-# Botón para activar/desactivar la opción de mantener la ventana arriba
-
-
 # Función para mantener la ventana siempre en la parte superior cada 5 segundos
 def check_always_on_top():
     if not root.wm_attributes("-topmost"):
@@ -194,16 +192,11 @@ def check_always_on_top():
 
 # Llama a la función de verificación cada 5 segundos
 check_always_on_top()
-# Llama a la función nuevamente cada 100 ms
-
 # Inicia la función de actualización del label
 update_text_image()
 
 # Iniciar el bucle principal
 root.mainloop()
 
-
- 
-</p>
 
 
