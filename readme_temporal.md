@@ -5,34 +5,36 @@ Este script utiliza `tkinter` y `pystray` para crear una aplicación que se ocul
 ```python
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtGui import QFont
 import sys
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Configurar la ventana
+        # Configurar la ventana con dimensiones pequeñas
         self.setWindowTitle("Textos Secuenciales")
-        self.setGeometry(100, 100, 800, 400)
+        self.setGeometry(100, 100, 350, 50)  # Ajustar a las dimensiones deseadas
 
         # Lista de oraciones con diferentes longitudes
         self.texts = [
             "Primera oración corta.",
-            "Esta es una segunda oración un poco más larga que la primera.",
-            "Aquí va una tercera, que puede ser mucho más extensa y tiene mucho más contenido que las anteriores.",
+            "Esta es una segunda oración un poco más larga.",
+            "Aquí va una tercera, que es más extensa.",
             "Cuarta oración.",
-            "Texto número cinco, relativamente corto.",
-            "La sexta oración es otra con longitud media para demostrar la flexibilidad.",
-            "Séptima, más larga que la sexta y que se mueve igual que las otras.",
-            "Octava: casi terminamos, esta es corta.",
-            "Novena y última oración, para completar la lista de ejemplo."
+            "Texto cinco, relativamente corto.",
+            "La sexta oración, longitud media.",
+            "Séptima oración.",
+            "Octava corta.",
+            "Novena y última oración."
         ]
         self.current_text_index = 0
 
         # Crear el QLabel
         self.label = QLabel(self.texts[self.current_text_index], self)
-        self.label.adjustSize()  # Ajustar el tamaño al texto actual
-        self.label.setGeometry(800, 180, self.label.width(), 40)  # Posición inicial fuera de la ventana a la derecha
+        self.label.setFont(QFont("Arial", 10))  # Ajustar el tamaño de la fuente
+        self.label.adjustSize()
+        self.label.setGeometry(350, 10, self.label.width(), 30)  # Posición inicial fuera de la ventana a la derecha
 
         # Configurar el temporizador para mover el QLabel
         self.timer = QTimer()
@@ -47,11 +49,11 @@ class MainWindow(QMainWindow):
         y = self.label.y()
 
         # Mover el QLabel hacia la izquierda
-        new_x = x - 5
+        new_x = x - 3  # Reducir la velocidad para un espacio más pequeño
 
         # Cambiar al siguiente texto cuando el QLabel desaparezca
         if new_x + self.label.width() <= 0:
-            new_x = 800  # Reiniciar la posición a la derecha de la ventana
+            new_x = 350  # Reiniciar la posición a la derecha de la ventana
             # Pasar al siguiente texto y ajustar el tamaño del QLabel
             self.current_text_index = (self.current_text_index + 1) % len(self.texts)
             self.label.setText(self.texts[self.current_text_index])
@@ -61,6 +63,8 @@ class MainWindow(QMainWindow):
         self.label.move(new_x, y)
 
 app = QApplication(sys.argv)
+app.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+app.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 window = MainWindow()
 sys.exit(app.exec_())
 
