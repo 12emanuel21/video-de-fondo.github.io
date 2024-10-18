@@ -58,9 +58,56 @@ crear_lista()
 mostrar_todo()
 
 
+#///////////////////////////////////////////
 
 
+import os
+import datetime
+import time
+import re
+from pathlib import Path
+import math
 
+inicio = time.time()
+
+ruta = "C:\\Users\\emanuel\\Desktop\\PROYECTOS\\PYTHON_mejor_curso\\9. DÍA 9 - PROGRAMA UN BUSCADOR DE NÚMEROS DE SERIE\\Mi_Gran_Directorio"
+hoy = datetime.date.today()
+archivos_encontrados = []
+
+# Función para buscar archivos de audio cuyo nombre coincida parcialmente con el patrón
+def buscar_audio_por_nombre(patron):
+    patron_regex = re.compile(patron, re.IGNORECASE)  # Ignorar mayúsculas/minúsculas
+    for carpeta, subcarpeta, archivo in os.walk(ruta):
+        for a in archivo:
+            # Verificar si es un archivo de audio
+            if a.lower().endswith(('.wav', '.mp3', '.flac')):
+                # Buscar el patrón en el nombre del archivo
+                if patron_regex.search(a):
+                    archivos_encontrados.append(a.title())
+
+def mostrar_resultados():
+    print('-' * 50)
+    print(f'Fecha de búsqueda: {hoy.day}/{hoy.month}/{hoy.year}')
+    print('\n')
+    print('ARCHIVO ENCONTRADO')
+    print('------------------')
+    for a in archivos_encontrados:
+        print(a)
+    print('\n')
+    print(f'Cantidad de archivos encontrados: {len(archivos_encontrados)}')
+    fin = time.time()
+    duracion = fin - inicio
+    print(f'Duración de la búsqueda: {math.ceil(duracion)} segundos')
+    print('-' * 50)
+
+# Ingresar el patrón a buscar
+patron_busqueda = input("Ingrese parte del nombre del audio a buscar: ")
+
+# Buscar archivos de audio por nombre
+buscar_audio_por_nombre(patron_busqueda)
+
+# Mostrar los resultados
+mostrar_resultados()
 
 
 
