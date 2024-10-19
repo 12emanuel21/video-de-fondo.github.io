@@ -109,6 +109,48 @@ buscar_audio_por_nombre(patron_busqueda)
 # Mostrar los resultados
 mostrar_resultados()
 
+#////////////////////////////////
+
+<form method="POST" action="{% url 'nombre_de_la_vista' %}">
+    {% csrf_token %}
+    <input type="text" name="nombre" placeholder="Nombre">
+    <input type="text" name="apellido" placeholder="Apellido">
+    <button type="submit">Enviar</button>
+</form>
+
+#/////////////////////////
+from django.shortcuts import render, redirect
+from .models import TuModelo
+from .forms import TuFormulario
+
+def tu_vista(request):
+    if request.method == "POST":
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        
+        # Crear el formulario manualmente con los datos recibidos
+        form = TuFormulario({
+            'nombre': nombre,
+            'apellido': apellido,
+        })
+        
+        if form.is_valid():
+            form.save()  # Guardar los datos si el formulario es válido
+            return redirect('alguna_url')
+        
+    else:
+        form = TuFormulario()
+
+    return render(request, 'tu_template.html', {'form': form})
+
+#/////////////////////
+from django import forms
+from .models import TuModelo
+
+class TuFormulario(forms.ModelForm):
+    class Meta:
+        model = TuModelo
+        fields = ['nombre', 'apellido']  # Campos del modelo
 
 
 
