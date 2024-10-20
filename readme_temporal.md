@@ -4,58 +4,56 @@ Este script utiliza `tkinter` y `pystray` para crear una aplicación que se ocul
 
 ```python
 
-import os
-import datetime
-import time
-import re
-from pathlib import Path
-import math
+class EmpleadoUpdateView(LoginRequiredMixin,UpdateView):
+    model = Empleado
+    template_name = "app_crud/actualizarviews.html"  # Tu template personalizado
+    fields = ['Nombre', 'Apellido', 'Email', 'Salario', 'completo']  # Incluye el campo 'completo'
+    success_url = reverse_lazy('listaEmpleados')  # Redirigir después de actualizar
+        
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+    # Sobreescribimos el método para capturar y guardar datos manualmente
+   
+    def form_valid(self, form):
+        # Imprime el contenido de request.POST para verificar que los datos se están enviando
 
-inicio = time.time()
+            # Obtener los valores del request.POST
+            nombre = self.request.POST.get('Nombre')
+            apellido = self.request.POST.get('Apellido')
+            email = self.request.POST.get('Email')
+            salario = self.request.POST.get('Salario')
+            completo = self.request.POST.get('completo')  # Checkbox, se envía 'on' cuando está marcado
 
-ruta = "C:\\Users\\emanuel\\Desktop\\PROYECTOS\\PYTHON_mejor_curso\\9. DÍA 9 - PROGRAMA UN BUSCADOR DE NÚMEROS DE SERIE\\Mi_Gran_Directorio"
-mi_patron = r"N\D{3}-\d{5}"
-hoy = datetime.date.today()
-hros_encontrados = [] 
-archivos_encontrados = []
+            # Convertir salario a Decimal
+            
+            # salario_decimal = Decimal(salario)
+            
+            try:
+                salario_decimal = Decimal(salario)
+            except (ValueError, TypeError):
+                salario_decimal = None
+            
+            # Convertir el campo 'completo' a booleano
+            completo_bool = True if completo == 'on' else False
 
-def buscar_numero(archivo,patron):
+            # Actualizamos los valores en el objeto empleado
+            empleado = form.save(commit=False)
+            empleado.Nombre = nombre
+            empleado.Apellido = apellido
+            empleado.Email = email
+            empleado.Salario = salario_decimal
+            empleado.completo = completo_bool
+
+            empleado.save()
+            return super().form_valid(form)
+
+
+    # Sobreescribimos el método get_context_data para pasar el objeto empleado al template
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['empleado'] = self.get_object()  # Pasa el objeto empleado al contexto
+        return context
     
-    este_archivo = open(archivo, 'r')
-    texto = este_archivo.read()
-    if re.search(patron, texto):
-        return re.search(patron, texto)
-    else:
-        return ""
-    
-def crear_lista():   
-    for carpeta,subcarpeta,archivo in os.walk(ruta):
-        for a in archivo:
-            resultado = buscar_numero(Path(carpeta,a),mi_patron)
-            if resultado != '':
-                hros_encontrados.append((resultado.group()))
-                archivos_encontrados.append(a.title())
-    
-                
-def mostrar_todo():
-    indice = 0
-    print('-'* 50)
-    print(f'Fecha de busqueda: {hoy.day}/{hoy.month}/{hoy.year}')
-    print('\n')
-    print('ARCHIVO\t\t\tNRO. SERIE')
-    print('--------\t\t\t----------')
-    for a in archivos_encontrados:
-        print(f'{a}\t{hros_encontrados[indice]}')
-        indice += 1
-    print('\n')
-    print(f'Numeros encontrados: {len(hros_encontrados)}')
-    fin = time.time()
-    duracion = fin - inicio
-    print(f'Duracion de la busqueda: {math.ceil(duracion)} segundos')
-    print('-'* 50)
-    
-crear_lista()
-mostrar_todo()
 
 
 #///////////////////////////////////////////
