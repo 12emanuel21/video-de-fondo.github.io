@@ -3,11 +3,17 @@
 Este es un ejemplo de cómo estructurar tu aplicación React.
 
 ```jsx
-import React from 'react';
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+import React, {Suspense, lazy} from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Login from './components/Login';
-import Registrar from './components/Registrar';
 import './App.css'
+
+const Login = lazy(() => import('./components/Login'));
+const Registrar = lazy(()=> import( './components/Registrar'));
+
+import Loading_carga from './components/Loading_carga';
 
 const App: React.FC = () => {
   return (
@@ -19,13 +25,16 @@ const App: React.FC = () => {
             <li><Link to="/registrar">Registrar</Link></li>
           </ul>
         </nav>
+        <Suspense fallback={<Loading_carga/>}>
         <Routes>
           <Route path="/" element={<Login />} /> 
           <Route path="/registrar" element={<Registrar />} />
         </Routes>
+        </Suspense>
       </div>
     </Router>
   );
 };
 
 export default App;
+
