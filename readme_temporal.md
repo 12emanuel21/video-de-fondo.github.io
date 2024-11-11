@@ -5,6 +5,8 @@ Este script utiliza `tkinter` y `pystray` para crear una aplicación que se ocul
 https://s3.amazonaws.com/botpress-binaries/botpress-v12_30_6-linux-x64.zip
 
 
+https://github.com/botpress/v12/
+
 ```python
 
 class EmpleadoUpdateView(LoginRequiredMixin,UpdateView):
