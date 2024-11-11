@@ -2,6 +2,9 @@
 
 Este script utiliza `tkinter` y `pystray` para crear una aplicación que se oculta en la bandeja del sistema.
 
+https://s3.amazonaws.com/botpress-binaries/botpress-v12_30_6-linux-x64.zip
+
+
 ```python
 
 class EmpleadoUpdateView(LoginRequiredMixin,UpdateView):
