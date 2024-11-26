@@ -94,44 +94,44 @@
 <br> ChatGPT
 <br> ¡De nada! La lista incluye los conceptos más relevantes y utilizados en React actualmente, pero siempre hay más cosas que explorar. React es una biblioteca en constante evolución, con un ecosistema muy amplio que se expande con nuevas herramientas, patrones y técnicas. A continuación, te detallo algunas áreas adicionales que pueden interesarte:
 <br> 
-<br> 1. Meta-frameworks y herramientas avanzadas
+1. Meta-frameworks y herramientas avanzadas
         <br> React por sí mismo es poderoso, pero su funcionalidad puede expandirse enormemente al combinarlo con otras herramientas. Por ejemplo:
         <br> 
         <br> Next.js: Meta-framework para React con funcionalidades avanzadas como renderizado híbrido (SSR/SSG/ISR), optimización de imágenes y manejo avanzado de rutas.
         <br> Remix: Alternativa a Next.js, enfocado en experiencias optimizadas desde el servidor.
         <br> Gatsby: Excelente para sitios estáticos con React, popular en aplicaciones rápidas y orientadas a contenido.
-<br> 2. React Native
+2. React Native
         <br> Aunque es un entorno diferente, React Native permite usar React para crear aplicaciones móviles nativas para iOS y Android.
         <br> 
         <br> Aprende sobre componentes nativos.
         <br> Manejo de plataformas específicas.
         <br> Integración con librerías nativas como react-native-navigation o expo.
-<br> 3. Animaciones y transiciones
+3. Animaciones y transiciones
         <br> Librerías de animaciones:
         <br> React-Spring o Framer Motion para animaciones fluidas.
         <br> react-transition-group para manejar transiciones entre estados.
-<br> 4. React con WebAssembly (WASM)
+ 4. React con WebAssembly (WASM)
         <br> Puedes usar React para construir interfaces que interactúen con código optimizado en WebAssembly, combinando lo mejor de ambos mundos (JavaScript y lenguajes como Rust o C++).
         <br> 
-<br> 5. Manejo de datos en tiempo real
+ 5. Manejo de datos en tiempo real
         <br> React + GraphQL:
         <br> Apollo Client o Relay.
         <br> Subscriptions para datos en tiempo real.
         <br> React + WebSockets: Construye aplicaciones interactivas como chats, videojuegos, o paneles en tiempo real.
-<br> 6. Realidad aumentada y virtual
+ 6. Realidad aumentada y virtual
         <br> React Three Fiber: Integración de React con WebGL para renderizar gráficos 3D en la web.
         <br> React VR: Extensión de React para crear experiencias inmersivas en realidad virtual y aumentada.
-<br> 7. Internacionalización (i18n)
+ 7. Internacionalización (i18n)
         <br> Usar librerías como react-i18next o formatjs para manejar múltiples idiomas y configuraciones regionales.
-<br> 8. Conexión con entornos modernos
+ 8. Conexión con entornos modernos
         <br> Microfrontends: Divide grandes aplicaciones React en módulos independientes que funcionan como servicios separados.
         <br> React + Docker: Despliegue de aplicaciones React en contenedores.
         <br> React con frameworks backend como Django (usando Django REST Framework), Flask o Express.js.
-<br> 9. Patrones avanzados y arquitectura
+ 9. Patrones avanzados y arquitectura
         <br> Patrones de diseño en React: Render props, Higher Order Components (HOCs), y Compound Components.
         <br> Arquitectura basada en eventos con Context o Redux.
         <br> Modularización de grandes proyectos.
-<br> 10. Trabajos futuros
+ 10. Trabajos futuros
         <br> React continúa evolucionando. Algunos temas emergentes incluyen:
         <br> 
         <br> Server Components: Una próxima gran característica de React para mejorar el rendimiento en aplicaciones que mezclan renderizado en servidor y cliente.
