@@ -14,71 +14,78 @@ DB_HOST = "localhost"
 DB_NAME = "nombre_base_datos"
 HISTORICO_TABLE = "historico_numeros"
 
-def procesar_excel_y_validar(archivo_excel, columnas_a_validar, numeros_bd, archivo_salida_encontrados, 
-                             archivo_modificado, archivo_txt, batch_size=100):
-    """
-    Procesa un archivo Excel pesado, valida números en columnas específicas y genera resultados optimizados.
-    """
+
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
+import openpyxl
+
+
+# Función para validar los números y generar archivos Excel y TXT
+def procesar_excel_y_guardar(archivo_excel, lista_numeros_db, columnas_validar):
     try:
-        # Leer solo las columnas necesarias del archivo Excel
-        df_excel = pd.read_excel(archivo_excel, usecols=columnas_a_validar, engine="openpyxl")
+        # Leer el archivo Excel, asegurando que las fechas se conviertan correctamente
+        columnas_fecha = ['FechaColumna1', 'FechaColumna2', 'FechaColumna3']  # Nombres de las columnas con fechas
+        df = pd.read_excel(archivo_excel, parse_dates=columnas_fecha)
+        
+        # Formatear las fechas en formato corto (DD/MM/YYYY)
+        for col in columnas_fecha:
+            if col in df.columns:
+                df[col] = df[col].dt.strftime('%d/%m/%Y')
+        
+        # Crear una copia del DataFrame para los datos modificados
+        df_modificado = df.copy()
 
-        # Optimizar búsqueda usando un set (más rápido que listas)
-        numeros_bd_set = set(numeros_bd)
-        numeros_encontrados = set()
+        # Verificar los números encontrados y crear el archivo con los datos encontrados
+        encontrados = []  # Lista para almacenar los números encontrados
+        for index, row in df.iterrows():
+            for col in columnas_validar:
+                if str(row[col]) in lista_numeros_db:
+                    encontrados.append(str(row[col]))  # Guardamos los números encontrados
+                    # Convertir el número encontrado a 0
+                    df_modificado.at[index, col] = 0
 
-        # Función para validar cada celda
-        def validar_celda(celda):
-            if pd.isnull(celda):
-                return celda  # Dejar nulos intactos
-            valor = str(celda)
-            if len(valor) == 8:  # Remover primer carácter si longitud es 8
-                valor = valor[1:]
-            if valor in numeros_bd_set:
-                numeros_encontrados.add(valor)
-                return 0  # Convertir a 0 si se encuentra el número
-            return celda
+        # Generar los archivos Excel y TXT
+        # Guardar el archivo con los números encontrados
+        archivo_encontrados = archivo_excel.replace('.xlsx', '_encontrados.xlsx')
+        df_encontrados = pd.DataFrame(encontrados, columns=['Números Encontrados'])
+        df_encontrados.to_excel(archivo_encontrados, index=False)
 
-        # Aplicar la validación a todas las columnas seleccionadas
-        for columna in columnas_a_validar:
-            df_excel[columna] = df_excel[columna].apply(validar_celda)
-
-        # Guardar los números encontrados en un archivo Excel
-        df_encontrados = pd.DataFrame(list(numeros_encontrados), columns=["Numero_Encontrado"])
-        df_encontrados.to_excel(archivo_salida_encontrados, index=False)
-
-        # Guardar el archivo Excel modificado
-        df_excel.to_excel(archivo_modificado, index=False)
+        # Guardar el archivo modificado con los números reemplazados por 0
+        archivo_modificado = archivo_excel.replace('.xlsx', '_modificado.xlsx')
+        df_modificado.to_excel(archivo_modificado, index=False)
 
         # Generar archivo TXT con los números encontrados
-        with open(archivo_txt, "w") as f:
-            for numero in numeros_encontrados:
-                f.write(f"{numero}\n")
+        archivo_txt = archivo_excel.replace('.xlsx', '_modificado.txt')
+        with open(archivo_txt, 'w') as f:
+            for numero in encontrados:
+                f.write(numero + '\n')
 
-        # Insertar los números encontrados en la base de datos
-        insertar_historico_numeros(numeros_encontrados, batch_size=batch_size)
-        return "Proceso completado con éxito."
+        # Mostrar mensaje de éxito
+        QMessageBox.information(None, "Proceso completado", "Archivos generados correctamente.")
+
+        # Insertar los números encontrados en la base de datos (si es necesario)
+        if encontrados:
+            insertar_en_base_datos(encontrados)
 
     except Exception as e:
-        return f"Error: {e}"
+        QMessageBox.critical(None, "Error", f"Ha ocurrido un error: {str(e)}")
 
-def insertar_historico_numeros(numeros_encontrados, batch_size=100):
-    """
-    Inserta los números encontrados en una tabla de PostgreSQL en lotes.
-    """
-    if not numeros_encontrados:
-        return
 
-    engine = create_engine(f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
-    fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-    data = [{"numero": num, "fecha_encontrado": fecha} for num in numeros_encontrados]
-    df_historico = pd.DataFrame(data)
-
+# Función para insertar los números encontrados en la base de datos (PostgreSQL)
+def insertar_en_base_datos(numeros_encontrados):
     try:
-        df_historico.to_sql(HISTORICO_TABLE, engine, if_exists="append", index=False, chunksize=batch_size, method="multi")
+        # Crear la conexión a la base de datos (asegúrate de ajustar los parámetros de conexión)
+        engine = create_engine('postgresql://usuario:contraseña@localhost:5432/mi_base_de_datos')
+
+        # Crear DataFrame con los números encontrados para insertar en la base de datos
+        df_numeros = pd.DataFrame(numeros_encontrados, columns=['numero'])
+
+        # Insertar en la tabla 'historico_numeros'
+        df_numeros.to_sql('historico_numeros', engine, if_exists='append', index=False)
+
+        print("Números insertados correctamente en la base de datos.")
+
     except Exception as e:
-        print(f"Error al insertar en PostgreSQL: {e}")
+        print(f"Error al insertar en la base de datos: {str(e)}")
 
 # ---------------------- INTERFAZ GRÁFICA PYQT5 ----------------------
 
