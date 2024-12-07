@@ -152,6 +152,7 @@ def procesar_archivo(self):
         # Procesar el archivo Excel
         mensaje = procesar_excel_y_validar(self.archivo_excel, columnas_a_validar, numeros_bd,
                                            archivo_encontrados, archivo_modificado, archivo_txt)
+        insertar_en_base_datos(encontrados, batch_size=200)
 
         # Mostrar mensaje de éxito o error
         QMessageBox.information(self, "Proceso Finalizado", f"{mensaje}\nArchivos guardados en: {self.carpeta_destino}")
