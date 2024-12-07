@@ -71,21 +71,34 @@ def procesar_excel_y_guardar(archivo_excel, lista_numeros_db, columnas_validar):
 
 
 # Función para insertar los números encontrados en la base de datos (PostgreSQL)
-def insertar_en_base_datos(numeros_encontrados):
+from datetime import datetime
+import pandas as pd
+from sqlalchemy import create_engine
+
+def insertar_en_base_datos(numeros_encontrados, batch_size=100):
+    """
+    Inserta los números encontrados en una tabla de PostgreSQL en lotes.
+    """
+    if not numeros_encontrados:
+        return
+
+    # Conectar a la base de datos PostgreSQL
+    engine = create_engine('postgresql://usuario:contraseña@localhost:5432/mi_base_de_datos')
+
+    # Obtener la fecha actual en formato YYYY-MM-DD HH:MM:SS
+    fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Crear el DataFrame con los números encontrados y la fecha
+    data = [{"numero": num, "fecha_encontrado": fecha} for num in numeros_encontrados]
+    df_historico = pd.DataFrame(data)
+
     try:
-        # Crear la conexión a la base de datos (asegúrate de ajustar los parámetros de conexión)
-        engine = create_engine('postgresql://usuario:contraseña@localhost:5432/mi_base_de_datos')
-
-        # Crear DataFrame con los números encontrados para insertar en la base de datos
-        df_numeros = pd.DataFrame(numeros_encontrados, columns=['numero'])
-
-        # Insertar en la tabla 'historico_numeros'
-        df_numeros.to_sql('historico_numeros', engine, if_exists='append', index=False)
-
+        # Insertar los datos en la base de datos en lotes
+        df_historico.to_sql('historico_numeros', engine, if_exists="append", index=False, 
+                            chunksize=batch_size, method="multi")
         print("Números insertados correctamente en la base de datos.")
-
     except Exception as e:
-        print(f"Error al insertar en la base de datos: {str(e)}")
+        print(f"Error al insertar en PostgreSQL: {e}")
 
 # ---------------------- INTERFAZ GRÁFICA PYQT5 ----------------------
 
