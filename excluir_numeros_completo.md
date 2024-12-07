@@ -29,6 +29,7 @@ def procesar_excel_y_guardar(archivo_excel, columnas_a_validar, numeros_en_bd):
 
     # Identificar números encontrados
     encontrados = []
+    modificados = []  # Lista para los números modificados
     
     # Recorremos las columnas a validar
     for columna in columnas_a_validar:
@@ -42,23 +43,32 @@ def procesar_excel_y_guardar(archivo_excel, columnas_a_validar, numeros_en_bd):
                 if valor_str in numeros_en_bd:
                     encontrados.append(valor_str)
                     df.at[i, columna] = 0  # Reemplazar con 0 en el archivo original
+                    modificados.append(valor_str)  # Agregar el número a la lista de modificados
 
-    # Guardar el archivo modificado y el archivo con los encontrados
+    # Guardar los archivos generados
     archivo_modificado = archivo_excel.replace('.xlsx', '_modificado.xlsx')
     archivo_encontrados = archivo_excel.replace('.xlsx', '_encontrados.xlsx')
+    archivo_csv_modificados = archivo_excel.replace('.xlsx', '_modificados.csv')
+    archivo_txt_modificados = archivo_excel.replace('.xlsx', '_modificados.txt')
 
-    # Guardar los archivos
+    # Guardar el archivo modificado (con números reemplazados por 0)
     df.to_excel(archivo_modificado, index=False)
+    
+    # Guardar el archivo con los números encontrados
     df_encontrados = pd.DataFrame({'numero': encontrados})
     df_encontrados.to_excel(archivo_encontrados, index=False)
 
-    # Generar archivo de texto con los encontrados
-    archivo_txt = archivo_excel.replace('.xlsx', '_encontrados.txt')
-    with open(archivo_txt, 'w') as f:
-        for numero in encontrados:
+    # Guardar el archivo CSV con los números modificados
+    df_modificados = pd.DataFrame({'numero': modificados})
+    df_modificados.to_csv(archivo_csv_modificados, index=False, header=['numero'])
+
+    # Guardar el archivo TXT con los números modificados
+    with open(archivo_txt_modificados, 'w') as f:
+        for numero in modificados:
             f.write(f"{numero}\n")
 
-    return encontrados, archivo_modificado, archivo_encontrados, archivo_txt
+    return encontrados, archivo_modificado, archivo_encontrados, archivo_csv_modificados, archivo_txt_modificados
+
 
 # Función para insertar los números encontrados en la base de datos en lotes
 def insertar_en_base_datos(numeros_encontrados, batch_size=100):
