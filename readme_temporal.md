@@ -40,24 +40,26 @@ def obtener_numeros_de_bd():
 
 
 def insertar_historico_numeros(numeros_encontrados, batch_size=100):
-    """Inserta los números encontrados en la base de datos por lotes."""
+    """Inserta los números encontrados en la base de datos PostgreSQL por lotes."""
     if not numeros_encontrados:
         print("No hay números encontrados para insertar en el histórico.")
         return
 
-    engine = create_engine(f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
+    # Configuración de la conexión a PostgreSQL
+    engine = create_engine(f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
     fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    # Crear un DataFrame para insertar
+    # Crear un DataFrame con los datos a insertar
     data = [{"numero": num, "fecha_encontrado": fecha} for num in numeros_encontrados]
     df_historico = pd.DataFrame(data)
 
-    # Inserción por lotes usando chunksize
+    # Inserción en lotes usando chunksize
     try:
-        df_historico.to_sql(HISTORICO_TABLE, engine, if_exists="append", index=False, chunksize=batch_size)
-        print(f"Números encontrados insertados en el histórico en lotes de {batch_size}.")
+        df_historico.to_sql(HISTORICO_TABLE, engine, if_exists="append", index=False, chunksize=batch_size, method="multi")
+        print(f"Números encontrados insertados en lotes de {batch_size} en PostgreSQL.")
     except Exception as e:
-        print(f"Error al insertar en la base de datos: {e}")
+        print(f"Error al insertar en PostgreSQL: {e}")
+
 
 
 
