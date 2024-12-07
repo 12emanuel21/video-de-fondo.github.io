@@ -39,8 +39,8 @@ def obtener_numeros_de_bd():
     return df['numero'].tolist()
 
 
-def insertar_historico_numeros(numeros_encontrados):
-    """Inserta los números encontrados en una tabla de histórico."""
+def insertar_historico_numeros(numeros_encontrados, batch_size=100):
+    """Inserta los números encontrados en la base de datos por lotes."""
     if not numeros_encontrados:
         print("No hay números encontrados para insertar en el histórico.")
         return
@@ -52,9 +52,14 @@ def insertar_historico_numeros(numeros_encontrados):
     data = [{"numero": num, "fecha_encontrado": fecha} for num in numeros_encontrados]
     df_historico = pd.DataFrame(data)
 
-    # Insertar en la base de datos
-    df_historico.to_sql(HISTORICO_TABLE, engine, if_exists="append", index=False)
-    print("Números encontrados insertados en el histórico.")
+    # Inserción por lotes usando chunksize
+    try:
+        df_historico.to_sql(HISTORICO_TABLE, engine, if_exists="append", index=False, chunksize=batch_size)
+        print(f"Números encontrados insertados en el histórico en lotes de {batch_size}.")
+    except Exception as e:
+        print(f"Error al insertar en la base de datos: {e}")
+
+
 
 
 def generar_txt_desde_excel(excel_modificado, txt_output):
