@@ -110,33 +110,34 @@ class ExcelValidatorApp(QWidget):
         self.setLayout(layout)
 
     def seleccionar_archivo(self):
-        options = QFileDialog.Options()
-        filePath, _ = QFileDialog.getOpenFileName(self, "Seleccionar Archivo Excel", "", "Excel Files (*.xlsx)", options=options)
-        if filePath:
-            self.archivo_excel = filePath
-            self.lblMensaje.setText(f"Archivo seleccionado: {filePath}")
-        else:
-            self.lblMensaje.setText("No se seleccionó ningún archivo.")
+    options = QFileDialog.Options()
+    filePath, _ = QFileDialog.getOpenFileName(self, "Seleccionar Archivo Excel", "", "Excel Files (*.xlsx)", options=options)
+    if filePath:
+        self.archivo_excel = filePath
+        self.carpeta_destino = os.path.dirname(filePath)  # Obtener la ruta de la carpeta del archivo
+        self.lblMensaje.setText(f"Archivo seleccionado: {filePath}")
+    else:
+        self.lblMensaje.setText("No se seleccionó ningún archivo.")
 
-    def procesar_archivo(self):
-        try:
-            columnas_a_validar = ["columna1", "columna2"]  # Ajusta las columnas según tu necesidad
-            numeros_bd = ["1234567", "7654321", "2345678"]  # Simula números desde la base de datos
+def procesar_archivo(self):
+    try:
+        columnas_a_validar = ["columna1", "columna2"]  # Ajusta las columnas según tu necesidad
+        numeros_bd = ["1234567", "7654321", "2345678"]  # Simula números desde la base de datos
 
-            # Archivos de salida
-            archivo_encontrados = "numeros_encontrados.xlsx"
-            archivo_modificado = "archivo_modificado.xlsx"
-            archivo_txt = "numeros_encontrados.txt"
+        # Archivos de salida generados en la misma carpeta que el archivo original
+        archivo_encontrados = os.path.join(self.carpeta_destino, "numeros_encontrados.xlsx")
+        archivo_modificado = os.path.join(self.carpeta_destino, "archivo_modificado.xlsx")
+        archivo_txt = os.path.join(self.carpeta_destino, "numeros_encontrados.txt")
 
-            # Procesar el archivo Excel
-            mensaje = procesar_excel_y_validar(self.archivo_excel, columnas_a_validar, numeros_bd,
-                                               archivo_encontrados, archivo_modificado, archivo_txt)
+        # Procesar el archivo Excel
+        mensaje = procesar_excel_y_validar(self.archivo_excel, columnas_a_validar, numeros_bd,
+                                           archivo_encontrados, archivo_modificado, archivo_txt)
 
-            # Mostrar mensaje de éxito o error
-            QMessageBox.information(self, "Proceso Finalizado", mensaje)
+        # Mostrar mensaje de éxito o error
+        QMessageBox.information(self, "Proceso Finalizado", f"{mensaje}\nArchivos guardados en: {self.carpeta_destino}")
 
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Ocurrió un error: {str(e)}")
+    except Exception as e:
+        QMessageBox.critical(self, "Error", f"Ocurrió un error: {str(e)}")
 
 
 if __name__ == '__main__':
