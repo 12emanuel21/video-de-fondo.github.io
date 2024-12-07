@@ -9,153 +9,121 @@ https://github.com/botpress/v12/
 
 ```python
 
-class EmpleadoUpdateView(LoginRequiredMixin,UpdateView):
-    model = Empleado
-    template_name = "app_crud/actualizarviews.html"  # Tu template personalizado
-    fields = ['Nombre', 'Apellido', 'Email', 'Salario', 'completo']  # Incluye el campo 'completo'
-    success_url = reverse_lazy('listaEmpleados')  # Redirigir después de actualizar
-        
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-    # Sobreescribimos el método para capturar y guardar datos manualmente
-   
-    def form_valid(self, form):
-        # Imprime el contenido de request.POST para verificar que los datos se están enviando
+import pandas as pd
+from sqlalchemy import create_engine
+from datetime import datetime
 
-            # Obtener los valores del request.POST
-            nombre = self.request.POST.get('Nombre')
-            apellido = self.request.POST.get('Apellido')
-            email = self.request.POST.get('Email')
-            salario = self.request.POST.get('Salario')
-            completo = self.request.POST.get('completo')  # Checkbox, se envía 'on' cuando está marcado
+# Configuración de la base de datos
+DB_USER = "root"
+DB_PASSWORD = "password"
+DB_HOST = "localhost"
+DB_NAME = "mi_base_de_datos"
+TABLE_NAME = "mi_tabla"
+HISTORICO_TABLE = "historico_numeros"
 
-            # Convertir salario a Decimal
-            
-            # salario_decimal = Decimal(salario)
-            
-            try:
-                salario_decimal = Decimal(salario)
-            except (ValueError, TypeError):
-                salario_decimal = None
-            
-            # Convertir el campo 'completo' a booleano
-            completo_bool = True if completo == 'on' else False
+# Configuración de archivos
+EXCEL_INPUT_PATH = "archivo_origen.xlsx"
+EXCEL_OUTPUT_MATCHED = "numeros_encontrados.xlsx"
+EXCEL_OUTPUT_MODIFIED = "archivo_modificado.xlsx"
+TXT_OUTPUT_MODIFIED = "archivo_modificado.txt"  # Archivo TXT adicional
 
-            # Actualizamos los valores en el objeto empleado
-            empleado = form.save(commit=False)
-            empleado.Nombre = nombre
-            empleado.Apellido = apellido
-            empleado.Email = email
-            empleado.Salario = salario_decimal
-            empleado.completo = completo_bool
-
-            empleado.save()
-            return super().form_valid(form)
+# Columnas a procesar (opcional)
+COLUMNAS_A_PROCESAR = ["columna1", "columna2"]  # Reemplaza con tus columnas
 
 
-    # Sobreescribimos el método get_context_data para pasar el objeto empleado al template
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['empleado'] = self.get_object()  # Pasa el objeto empleado al contexto
-        return context
-    
+def obtener_numeros_de_bd():
+    """Extrae números de la base de datos."""
+    engine = create_engine(f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
+    query = f"SELECT numero FROM {TABLE_NAME}"  # Cambia 'numero' por tu columna específica
+    df = pd.read_sql(query, engine)
+    return df['numero'].tolist()
 
 
-#///////////////////////////////////////////
+def insertar_historico_numeros(numeros_encontrados):
+    """Inserta los números encontrados en una tabla de histórico."""
+    if not numeros_encontrados:
+        print("No hay números encontrados para insertar en el histórico.")
+        return
+
+    engine = create_engine(f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
+    fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Crear un DataFrame para insertar
+    data = [{"numero": num, "fecha_encontrado": fecha} for num in numeros_encontrados]
+    df_historico = pd.DataFrame(data)
+
+    # Insertar en la base de datos
+    df_historico.to_sql(HISTORICO_TABLE, engine, if_exists="append", index=False)
+    print("Números encontrados insertados en el histórico.")
 
 
-import os
-import datetime
-import time
-import re
-from pathlib import Path
-import math
-
-inicio = time.time()
-
-ruta = "C:\\Users\\emanuel\\Desktop\\PROYECTOS\\PYTHON_mejor_curso\\9. DÍA 9 - PROGRAMA UN BUSCADOR DE NÚMEROS DE SERIE\\Mi_Gran_Directorio"
-hoy = datetime.date.today()
-archivos_encontrados = []
-
-# Función para buscar archivos de audio cuyo nombre coincida parcialmente con el patrón
-def buscar_audio_por_nombre(patron):
-    patron_regex = re.compile(patron, re.IGNORECASE)  # Ignorar mayúsculas/minúsculas
-    for carpeta, subcarpeta, archivo in os.walk(ruta):
-        for a in archivo:
-            # Verificar si es un archivo de audio
-            if a.lower().endswith(('.wav', '.mp3', '.flac')):
-                # Buscar el patrón en el nombre del archivo
-                if patron_regex.search(a):
-                    archivos_encontrados.append(a.title())
-
-def mostrar_resultados():
-    print('-' * 50)
-    print(f'Fecha de búsqueda: {hoy.day}/{hoy.month}/{hoy.year}')
-    print('\n')
-    print('ARCHIVO ENCONTRADO')
-    print('------------------')
-    for a in archivos_encontrados:
-        print(a)
-    print('\n')
-    print(f'Cantidad de archivos encontrados: {len(archivos_encontrados)}')
-    fin = time.time()
-    duracion = fin - inicio
-    print(f'Duración de la búsqueda: {math.ceil(duracion)} segundos')
-    print('-' * 50)
-
-# Ingresar el patrón a buscar
-patron_busqueda = input("Ingrese parte del nombre del audio a buscar: ")
-
-# Buscar archivos de audio por nombre
-buscar_audio_por_nombre(patron_busqueda)
-
-# Mostrar los resultados
-mostrar_resultados()
-
-#////////////////////////////////
-
-<form method="POST" action="{% url 'nombre_de_la_vista' %}">
-    {% csrf_token %}
-    <input type="text" name="nombre" placeholder="Nombre">
-    <input type="text" name="apellido" placeholder="Apellido">
-    <button type="submit">Enviar</button>
-</form>
-
-#/////////////////////////
-from django.shortcuts import render, redirect
-from .models import TuModelo
-from .forms import TuFormulario
-
-def tu_vista(request):
-    if request.method == "POST":
-        nombre = request.POST.get('nombre')
-        apellido = request.POST.get('apellido')
-        
-        # Crear el formulario manualmente con los datos recibidos
-        form = TuFormulario({
-            'nombre': nombre,
-            'apellido': apellido,
-        })
-        
-        if form.is_valid():
-            form.save()  # Guardar los datos si el formulario es válido
-            return redirect('alguna_url')
-        
-    else:
-        form = TuFormulario()
-
-    return render(request, 'tu_template.html', {'form': form})
-
-#/////////////////////
-from django import forms
-from .models import TuModelo
-
-class TuFormulario(forms.ModelForm):
-    class Meta:
-        model = TuModelo
-        fields = ['nombre', 'apellido']  # Campos del modelo
+def generar_txt_desde_excel(excel_modificado, txt_output):
+    """Genera un archivo TXT a partir del Excel modificado."""
+    df = pd.read_excel(excel_modificado, sheet_name=None)
+    with open(txt_output, "w", encoding="utf-8") as f:
+        for sheet_name, sheet_df in df.items():
+            f.write(f"--- Hoja: {sheet_name} ---\n")
+            sheet_df.to_string(f, index=False)  # Escribe los datos como texto
+            f.write("\n\n")
+    print(f"Archivo TXT generado: {txt_output}")
 
 
+def procesar_excel_y_guardar_historico(input_excel, output_matched, output_modified, txt_output, columnas=None):
+    """Función principal: procesa el Excel, encuentra números y guarda histórico."""
+    # 1. Obtener números de la base de datos
+    numeros_bd = obtener_numeros_de_bd()
+    numeros_bd = [str(numero) for numero in numeros_bd]  # Asegurar que sean strings
+
+    # 2. Leer el archivo Excel
+    df = pd.read_excel(input_excel, sheet_name=None)  # Lee todas las hojas del Excel
+    numeros_encontrados = set()
+
+    # Función interna para validar y modificar los números
+    def procesar_numero(valor):
+        if pd.isna(valor) or not isinstance(valor, (int, str)):
+            return valor
+        valor_str = str(valor)
+        if len(valor_str) == 8:  # Remover primer carácter si tiene longitud 8
+            valor_str = valor_str[1:]
+        if valor_str in numeros_bd:
+            numeros_encontrados.add(valor_str)
+            return 0  # Reemplaza con 0 si hay coincidencia
+        return valor
+
+    # 3. Procesar cada hoja del Excel
+    hojas_modificadas = {}
+    for sheet_name, sheet_df in df.items():
+        if columnas:  # Solo procesar columnas específicas
+            for col in columnas:
+                if col in sheet_df.columns:  # Validar si la columna existe
+                    sheet_df[col] = sheet_df[col].apply(procesar_numero)
+        else:  # Procesar todas las columnas
+            sheet_df = sheet_df.applymap(procesar_numero)
+
+        hojas_modificadas[sheet_name] = sheet_df
+
+    # 4. Guardar los números encontrados en un Excel
+    df_numeros_encontrados = pd.DataFrame(list(numeros_encontrados), columns=["Numeros Encontrados"])
+    df_numeros_encontrados.to_excel(output_matched, index=False)
+
+    # 5. Guardar el Excel modificado
+    with pd.ExcelWriter(output_modified, engine='openpyxl') as writer:
+        for sheet_name, mod_df in hojas_modificadas.items():
+            mod_df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+    # 6. Insertar los números encontrados en el histórico
+    insertar_historico_numeros(numeros_encontrados)
+
+    # 7. Generar un archivo TXT del Excel modificado
+    generar_txt_desde_excel(output_modified, txt_output)
+
+    print("Proceso completado:")
+    print(f"- Números encontrados guardados en: {output_matched}")
+    print(f"- Archivo modificado guardado en: {output_modified}")
+    print(f"- Archivo TXT generado en: {txt_output}")
+    print("- Números insertados en el histórico de la base de datos.")
 
 
-
+# Ejemplo de llamado a la función principal
+if __name__ == "__main__":
+    procesar_excel_y_guardar_historico(EXCEL_INPUT_PATH, EXCEL_OUTPUT_MATCHED, EXCEL_OUTPUT_MODIFIED, TXT_OUTPUT_MODIFIED, COLUMNAS_A_PROCESAR)
