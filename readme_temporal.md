@@ -75,60 +75,75 @@ def generar_txt_desde_excel(excel_modificado, txt_output):
     print(f"Archivo TXT generado: {txt_output}")
 
 
-def procesar_excel_y_guardar_historico(input_excel, output_matched, output_modified, txt_output, columnas=None):
-    """Función principal: procesa el Excel, encuentra números y guarda histórico."""
-    # 1. Obtener números de la base de datos
-    numeros_bd = obtener_numeros_de_bd()
-    numeros_bd = [str(numero) for numero in numeros_bd]  # Asegurar que sean strings
+def procesar_excel_y_validar(archivo_excel, columnas_a_validar, numeros_bd, archivo_salida_encontrados, 
+                             archivo_modificado, archivo_txt, batch_size=100):
+    """
+    Procesa un archivo Excel pesado, valida números en columnas específicas y genera resultados optimizados.
+    """
+    try:
+        # Leer solo las columnas necesarias del archivo Excel
+        df_excel = pd.read_excel(archivo_excel, usecols=columnas_a_validar, engine="openpyxl")
 
-    # 2. Leer el archivo Excel
-    df = pd.read_excel(input_excel, sheet_name=None)  # Lee todas las hojas del Excel
-    numeros_encontrados = set()
+        # Optimizar búsqueda usando un set (más rápido que listas para buscar)
+        numeros_bd_set = set(numeros_bd)
+        numeros_encontrados = set()
 
-    # Función interna para validar y modificar los números
-    def procesar_numero(valor):
-        if pd.isna(valor) or not isinstance(valor, (int, str)):
-            return valor
-        valor_str = str(valor)
-        if len(valor_str) == 8:  # Remover primer carácter si tiene longitud 8
-            valor_str = valor_str[1:]
-        if valor_str in numeros_bd:
-            numeros_encontrados.add(valor_str)
-            return 0  # Reemplaza con 0 si hay coincidencia
-        return valor
+        # Función para procesar cada celda
+        def validar_celda(celda):
+            if pd.isnull(celda):
+                return celda  # Dejar nulos intactos
+            valor = str(celda)
+            if len(valor) == 8:  # Remover primer carácter si longitud es 8
+                valor = valor[1:]
+            if valor in numeros_bd_set:
+                numeros_encontrados.add(valor)
+                return 0  # Convertir a 0 si encontrado
+            return celda
 
-    # 3. Procesar cada hoja del Excel
-    hojas_modificadas = {}
-    for sheet_name, sheet_df in df.items():
-        if columnas:  # Solo procesar columnas específicas
-            for col in columnas:
-                if col in sheet_df.columns:  # Validar si la columna existe
-                    sheet_df[col] = sheet_df[col].apply(procesar_numero)
-        else:  # Procesar todas las columnas
-            sheet_df = sheet_df.applymap(procesar_numero)
+        # Aplicar la función a todas las columnas seleccionadas
+        for columna in columnas_a_validar:
+            df_excel[columna] = df_excel[columna].apply(validar_celda)
 
-        hojas_modificadas[sheet_name] = sheet_df
+        # Guardar números encontrados en un archivo Excel
+        df_encontrados = pd.DataFrame(list(numeros_encontrados), columns=["Numero_Encontrado"])
+        df_encontrados.to_excel(archivo_salida_encontrados, index=False)
+        print(f"Números encontrados guardados en {archivo_salida_encontrados}.")
 
-    # 4. Guardar los números encontrados en un Excel
-    df_numeros_encontrados = pd.DataFrame(list(numeros_encontrados), columns=["Numeros Encontrados"])
-    df_numeros_encontrados.to_excel(output_matched, index=False)
+        # Guardar archivo modificado
+        df_excel.to_excel(archivo_modificado, index=False)
+        print(f"Archivo modificado guardado en {archivo_modificado}.")
 
-    # 5. Guardar el Excel modificado
-    with pd.ExcelWriter(output_modified, engine='openpyxl') as writer:
-        for sheet_name, mod_df in hojas_modificadas.items():
-            mod_df.to_excel(writer, sheet_name=sheet_name, index=False)
+        # Generar archivo TXT
+        with open(archivo_txt, "w") as f:
+            for numero in numeros_encontrados:
+                f.write(f"{numero}\n")
+        print(f"Archivo TXT guardado en {archivo_txt}.")
 
-    # 6. Insertar los números encontrados en el histórico
-    insertar_historico_numeros(numeros_encontrados)
+        # Insertar en la base de datos por lotes
+        insertar_historico_numeros(numeros_encontrados, batch_size=batch_size)
 
-    # 7. Generar un archivo TXT del Excel modificado
-    generar_txt_desde_excel(output_modified, txt_output)
+    except Exception as e:
+        print(f"Error al procesar el archivo Excel: {e}")
 
-    print("Proceso completado:")
-    print(f"- Números encontrados guardados en: {output_matched}")
-    print(f"- Archivo modificado guardado en: {output_modified}")
-    print(f"- Archivo TXT generado en: {txt_output}")
-    print("- Números insertados en el histórico de la base de datos.")
+def insertar_historico_numeros(numeros_encontrados, batch_size=100):
+    """Inserta los números encontrados en PostgreSQL por lotes."""
+    if not numeros_encontrados:
+        print("No hay números encontrados para insertar en la base de datos.")
+        return
+
+    engine = create_engine(f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
+    fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Preparar datos para insertar
+    data = [{"numero": num, "fecha_encontrado": fecha} for num in numeros_encontrados]
+    df_historico = pd.DataFrame(data)
+
+    try:
+        # Inserción por lotes en PostgreSQL
+        df_historico.to_sql(HISTORICO_TABLE, engine, if_exists="append", index=False, chunksize=batch_size, method="multi")
+        print(f"Números insertados en la base de datos en lotes de {batch_size}.")
+    except Exception as e:
+        print(f"Error al insertar en PostgreSQL: {e}")
 
 
 # Ejemplo de llamado a la función principal
