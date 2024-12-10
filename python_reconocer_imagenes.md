@@ -39,3 +39,35 @@ print(text)
 # Mostrar la imagen resultante
 cv2.imshow(winname="Face", mat=img)
 cv2.waitKey(delay=0)
+
+
+#ejemplo de cordenandas
+
+import cv2
+import pytesseract
+
+# Configura pytesseract para usar el ejecutable de Tesseract
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+# Lee la imagen
+img = cv2.imread("example_image_with_text.jpg")
+
+# Define las coordenadas de la región de interés (ROI)
+x, y, w, h = 100, 100, 300, 200  # Ejemplo de coordenadas (x, y, ancho, alto)
+
+# Recorta la imagen a la región de interés
+roi = img[y:y+h, x:x+w]
+
+# Convierte la imagen a escala de grises
+gray = cv2.cvtColor(src=roi, code=cv2.COLOR_BGR2GRAY)
+
+# Reconocimiento de texto en la región de interés usando Tesseract
+text = pytesseract.image_to_string(gray)
+
+# Imprimir el texto extraído
+print("Texto reconocido en la región de interés:")
+print(text)
+
+
+
+
