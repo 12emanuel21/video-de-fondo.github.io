@@ -1,5 +1,7 @@
 # Mi Proyecto React
 
+https://github.com/platzi/curso-react-practico/tree/clase-11
+
 Este es un ejemplo de cómo estructurar tu aplicación React.
 
 ```jsx
