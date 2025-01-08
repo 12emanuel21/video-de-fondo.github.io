@@ -1,5 +1,28 @@
 ```python
 
+Que funciona 
+1 Funciona la generación del documento y creación de las rutas
+2 funciona la búsqueda de llamadas 
+3  
+Que no funciona 
+1 al filtrar por el peso los datos del documento y las grabaciones no concuerda 
+2 generar una mejor forma de realizar el filtro por duración de la llamada 
+3 la validación de documentos csv y XLSX funcione
+Que falta para que funcione 
+1 tener un standar de archivo 
+Que lea un documento txt para que de ahí tome los valores a filtrar de las tipificación 
+2 
+Funciones que puedo hacer en casa
+1 puedo hacer una función recursiva 
+Que este monitoreando el dataframe
+Validando el peso de la grabación 
+2 hacer que antes que se copié y pegue el audio valide que coincida si no coincide que tome otra fila y la valide es decir que valide fila porfila busque si encuentra se queda sino se cambia 
+
+
+Hacer a primera hora 1: no lee el documento csv mañana validar de primero
+
+
+
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QMessageBox
 import pandas as pd
