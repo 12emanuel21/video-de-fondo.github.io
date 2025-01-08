@@ -23,6 +23,21 @@ Hacer a primera hora 1: no lee el documento csv mañana validar de primero
 
 
 
+con python puedo hacer que una funcion que este monitorendo todo lo que se  esta ejecutando por que tengo un dile y es que en mi programa genera un documento excel de ese documento se buscan unas grabaciones pero le aplico un filtro de 2 minutos en adelante pero este filtro genera que la cantidad de grabaciones disminuya y esto hace que la informacion del documento no sea correcta entonces querio hacer que la funcion este monitorian el dataframe del excel y que recorra todas las grabaciones busque las que coincidan con las grabaciones pero ademas el programa pide un numero de grabaciones ejemplo 50 pero se realizo el filtro y quedan 30 entonces me faltan 20 crreo que hay que volver al inicio a la creacion del docuemnto que hay bastante datos y tomar los faltantes y buscar las grabaciones correspondient
+
+Para resolver este problema en Python, puedes seguir un enfoque que combina monitoreo y procesamiento iterativo. Aquí tienes un plan general:
+
+Leer y Monitorear el DataFrame: Carga el archivo Excel en un DataFrame de pandas y monitorea el número de grabaciones filtradas.
+
+Aplicar Filtro Inicial: Filtra las grabaciones mayores a 2 minutos.
+
+Verificar Cantidad de Grabaciones: Compara el número de grabaciones filtradas con el número requerido. Si es menor, necesitarás buscar más grabaciones.
+
+Buscar Grabaciones Adicionales: Vuelve al DataFrame original o a otra fuente de datos, selecciona grabaciones adicionales que no se incluyeron en el primer filtro, y aplícalas hasta completar la cantidad requerida.
+
+Actualizar el Documento: Una vez que tengas todas las grabaciones necesarias, actualiza el documento Excel.
+
+
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel, QMessageBox
 import pandas as pd
