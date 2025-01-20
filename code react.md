@@ -6,6 +6,49 @@ Este es un ejemplo de cómo estructurar tu aplicación React.
 
 ```jsx
 
+
+/project-root
+  /public
+    /images
+    /icons
+    /fonts
+  /src
+    /components
+      /common
+      /layout
+      /ui
+    /pages
+      /api
+      /auth
+      /dashboard
+      /[dynamic-route]
+    /styles
+      /global.css
+      /variables.css
+    /utils
+      /api
+      /helpers
+      /hooks
+      /constants
+    /contexts
+    /services
+    /config
+  /tests
+    /unit
+    /integration
+  /docs
+  /scripts
+  next.config.js
+  package.json
+  README.md
+  .env.local
+  .eslintrc.js
+  .prettierrc
+  tsconfig.json (si usas TypeScript)
+
+
+
+
 const axios = require('axios'); // Axios para manejar solicitudes HTTP
 /**
  * Acción para obtener el menú según la hora actual
