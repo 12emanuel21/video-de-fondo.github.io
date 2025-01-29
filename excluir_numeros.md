@@ -1,9 +1,9 @@
 ```python
 prompt api
-"Quiero crear un CRUD en Next.js usando React y Tailwind para la interfaz. <br/>
-Ya tengo una API con los métodos GET, POST, PUT y DELETE. Necesito ayuda para consumir <br/>
-la API y mostrar los datos en una tabla con opciones para editar y eliminar. Además, quiero <br/>
-un formulario para agregar nuevos registros. Prefiero usar useState y useEffect para manejar <br/>
+"Quiero crear un CRUD en Next.js usando React y Tailwind para la interfaz. 
+Ya tengo una API con los métodos GET, POST, PUT y DELETE. Necesito ayuda para consumir
+la API y mostrar los datos en una tabla con opciones para editar y eliminar. Además, quiero 
+un formulario para agregar nuevos registros. Prefiero usar useState y useEffect para manejar 
 los datos y llamadas a la API. También me gustaría que el diseño sea limpio y responsivo."
 
 
