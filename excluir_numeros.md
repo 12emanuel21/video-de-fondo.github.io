@@ -6,6 +6,12 @@ la API y mostrar los datos en una tabla con opciones para editar y eliminar. Ade
 un formulario para agregar nuevos registros. Prefiero usar useState y useEffect para manejar 
 los datos y llamadas a la API. También me gustaría que el diseño sea limpio y responsivo."
 
+Prompt general:
+"Quiero aprender sobre [TEMA]. Me gustaría una explicación clara y práctica,
+con ejemplos de código y casos de uso reales. Prefiero un enfoque paso a paso para 
+entender los conceptos clave y cómo aplicarlos en proyectos reales. También me interesa
+conocer buenas prácticas y errores comunes a evitar. Si es posible, proporciona ejercicios
+o desafíos para reforzar el aprendizaje."
 
 Que funciona 
 1 Funciona la generación del documento y creación de las rutas
