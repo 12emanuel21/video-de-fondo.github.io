@@ -13,6 +13,9 @@ entender los conceptos clave y cómo aplicarlos en proyectos reales. También me
 conocer buenas prácticas y errores comunes a evitar. Si es posible, proporciona ejercicios
 o desafíos para reforzar el aprendizaje."
 
+https://github.com/nextjsargentina/next.js-docs/blob/main/public/pdf/next.js_v14_documentation.pdf
+
+
 Que funciona 
 1 Funciona la generación del documento y creación de las rutas
 2 funciona la búsqueda de llamadas 
