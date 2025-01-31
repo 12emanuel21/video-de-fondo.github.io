@@ -14,6 +14,7 @@ conocer buenas prácticas y errores comunes a evitar. Si es posible, proporciona
 o desafíos para reforzar el aprendizaje."
 
 https://www.youtube.com/watch?v=aEFkWxUNAVc
+https://github.com/umairjameel321/next14-restapis
 
 https://www.youtube.com/watch?v=gEB3ckYeZF4
 
