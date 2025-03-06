@@ -1,4 +1,6 @@
-python```
+```python
+
+
 
 urls.py
 from django.urls import path, include
