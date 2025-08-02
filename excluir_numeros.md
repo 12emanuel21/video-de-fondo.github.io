@@ -21,3 +21,24 @@ __validar que el bot continúe y deje guardar nuevamente el segundo acuerdo
 ___todo sale bien crear automatización de borrado de gestión de los clientes 
 10. Finalizado Falabella o llegar a un punto muerto preguntar cómo continuar ya que eso debe quedar hoy
 11. Bot de tuya hacer el flujo y presentar para después hacer las api de jurídico y tuya
+
+
+
+
+Temas que no se puede automatizar 
+1. Correo de los exco esa lista de cuentas no se puede 
+2. Correo de especiales : indican los días en la que los especiales están vigentes para ser ajustadas 
+3. Validación de cuentas de la que se tiene poca información en el cyber
+4. El programa génera fallas con las gestiones por qué hay errores que no se pueden tratar
+
+
+Temas que si se pueden automatizar 
+1. Los ajustes que se validan por la suma de los pagos 
+2. Las cuotas adelantadas solo si se tienen los pagos del cliente 
+3. Exco por la gestión de AUTORIZADO POR BANCO 
+
+Posibles fallas de porque los ajustes no funcionan 
+1. Al no tener todos los pagos al realizar la suma de los pagos hay ajustes que no se toman
+2. Al validar las gestiones permite falsos positivos 
+3. El numérico identifica ajustes que el manual no así que tengo que validar con fray
+4.
