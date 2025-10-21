@@ -1,44 +1,24 @@
 ```python
 
 
-1. Pensar en las actividades de hoy
-2. Ayer realice un acuerdo por ende debo borrar ese registro ya sabes si. No hay bot y hay un acuerdo de ayer ese fui yo
-3. Hacer pruebas en el bot de Falabella haciendo acuerdos pero este trae unos problemas
-__primero el bot identifica que ya existe un acuerdo por ende es probable que deje de funcionar
-___otra cosa eliminar esos registros
-___hacer la automatización de eliminación de las cuentas bloquedas
-4. Llamar al sr Pablo para tener YouTube 
-5. Escribirle a Fabián para realizar pruebas 
-6. En los espacios libres intentar hacer lo requerido para la landing page que es
-___hacer los simuladores
-___hacer el formulario para autogestión del cliente.
-___hacer un mapeo de todos los puntos de pago y enviárselo esto para que el cliente sepa por donde puede realizar el pago
-7. Ojo si haces todo a la ves te estresadas y fallarás así que si estás haciendo bots continua haciendo bots 
-8. Continua haciendo el bot de tuya si te frena algo pásalo por alto y continúa después lo solucionas 
-9. Que hacer primero el bot de tuya con datos ficticio mientras llega Fabián y comenzar hacer pruebas con el de Falabella el
-__objetivo es que guarde la gestión con la célula y tipificación una vez guardado
-__validar que el bot continúe y deje guardar nuevamente el segundo acuerdo
-___todo sale bien crear automatización de borrado de gestión de los clientes 
-10. Finalizado Falabella o llegar a un punto muerto preguntar cómo continuar ya que eso debe quedar hoy
-11. Bot de tuya hacer el flujo y presentar para después hacer las api de jurídico y tuya
+landing page apuntes 
+
+
+-- los simuladores ya no van hacer simuladores si no otro método para generar acuerdos de pago
+
+-- retirar botón de whatsapp dejar solo el de las negociaciones
+
+-- tomar la información de la base de datos de tecnocob y alimentar la landing page
+
+-- en el tur agregar el funcionamiento del whatsapp como bobuja flotante
+
+-- agregar logs en toda la pagina para almacenarlo en base de datos para tener un estudio del aplicativo
+
+-- 
+
+
+estos es aparte pero repórtale a Felipe sobre el caso de Javier cervantes donde tiene el su chat pegado
 
 
 
 
-Temas que no se puede automatizar 
-1. Correo de los exco esa lista de cuentas no se puede 
-2. Correo de especiales : indican los días en la que los especiales están vigentes para ser ajustadas 
-3. Validación de cuentas de la que se tiene poca información en el cyber
-4. El programa génera fallas con las gestiones por qué hay errores que no se pueden tratar
-
-
-Temas que si se pueden automatizar 
-1. Los ajustes que se validan por la suma de los pagos 
-2. Las cuotas adelantadas solo si se tienen los pagos del cliente 
-3. Exco por la gestión de AUTORIZADO POR BANCO 
-
-Posibles fallas de porque los ajustes no funcionan 
-1. Al no tener todos los pagos al realizar la suma de los pagos hay ajustes que no se toman
-2. Al validar las gestiones permite falsos positivos 
-3. El numérico identifica ajustes que el manual no así que tengo que validar con fray
-4.
