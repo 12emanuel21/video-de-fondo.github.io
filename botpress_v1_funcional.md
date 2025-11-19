@@ -1,5 +1,7 @@
 ```python
 
+https://7cc8fac5934a.ngrok-free.app/admin/
+https://7cc8fac5934a.ngrok-free.app/live_chats/
 
 views.py
 import json
