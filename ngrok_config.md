@@ -29,3 +29,10 @@ activer redis
 
 sudo service redis-server status
 sudo service redis-server start
+
+
+
+https://autobotsdev.dev/chat/webhook/whatsapp/token_prueba_123/
+https://f67c-2a09-bac5-26d0-aa-00-11-1a5.ngrok-free.app/orquestador/webhook/token_prueba_123/
+
+daphne -v 2 -b 127.0.0.1 -p 8000 chatbots_ccob.asgi:application
