@@ -1,18 +1,8 @@
 ```python
 
-7W552RQ5PQ
-PHFNQ5Q5BY
-VZR8HAR6BB
-BAT4R6D5WJ
-57T822X9RT
-RRNXFEJD3M
-V4URM9G6G5
-WXZ8WFJEJP
-YRQRQ2ZBMG
-7ZRTVTMRMH
 
-esta es la api de acceso y confiuracion de ngrok
-ngrok config add-authtoken 2xTb9JwUtk5nXiqqPIwFQQHV2Lm_DEaFZ2YWSKUJbf35oEQM
+
+74asd65f5ds1354dfsfdsgf-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
 
 esta es la de botpress en el puerto 8000
 https://7e61-38-188-225-180.ngrok-free.app/webhook/
