@@ -2,7 +2,6 @@
 
 
 
-74asd65f5ds1354dfsfdsgf-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
 
 esta es la de botpress en el puerto 8000
 https://7e61-38-188-225-180.ngrok-free.app/webhook/
@@ -28,3 +27,9 @@ https://autobotsdev.dev/chat/webhook/whatsapp/token_prueba_123/
 https://f67c-2a09-bac5-26d0-aa-00-11-1a5.ngrok-free.app/orquestador/webhook/token_prueba_123/
 
 daphne -v 2 -b 127.0.0.1 -p 8000 chatbots_ccob.asgi:application
+
+
+
+74asd65f5ds1354dfsfdsgf-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
+12emanuel21
+git clone https://github.com/12emanuel21/chat_bot_private_proyecto.git
