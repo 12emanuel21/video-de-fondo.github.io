@@ -2,6 +2,7 @@
 ```python
 https://www.obeythetestinggoat.com/pages/book.html
 
+https://github.com/meerilahi/Books-Collection/blob/main/AI%20Engineering%20by%20Chip%20Huyen.pdf
 https://ptgmedia.pearsoncmg.com/images/9780321992475/samplepages/9780321992475.pdf
 teoría de conjuntos
 
