@@ -2,6 +2,9 @@
 ```python
 https://www.obeythetestinggoat.com/pages/book.html
 
+https://ptgmedia.pearsoncmg.com/images/9780321992475/samplepages/9780321992475.pdf
+teoría de conjuntos
+
 1.	Input and print
 2.	Tipos de datos
 3.	Variables y sus nombres
